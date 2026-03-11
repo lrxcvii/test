@@ -1,0 +1,191 @@
+@import url("https://fonts.googleapis.com/css2?family=Special+Elite&display=swap");
+
+:root {
+  --burn: #b07840;
+  --ash:  #907060;
+  --ink:  #080808;
+  --dim:  #5a4a3a;
+}
+
+@keyframes flicker {
+  0%,100% { opacity: 1; }
+  91%     { opacity: 1; }
+  93%     { opacity: .35; }
+  94%     { opacity: 1; }
+  97%     { opacity: .75; }
+  98%     { opacity: 1; }
+}
+@keyframes scan {
+  0%   { top: -3px; }
+  100% { top: 155px; }
+}
+@keyframes tglitch {
+  0%,100% { text-shadow: none; transform: none; }
+  7%  { text-shadow: 2px 0 var(--burn), -2px 0 #1a0800; transform: translateX(1px); }
+  8%  { text-shadow: none; transform: none; }
+  60% { text-shadow: -1px 0 var(--dim); transform: translateX(-1px); }
+  61% { text-shadow: none; transform: none; }
+}
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── WRAPPER ── */
+.vf {
+  width: 300px;
+  font-family: "Special Elite", Georgia, serif;
+  animation: fadein .8s ease both;
+}
+
+/* ── TOP LINE ── */
+.vf-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 4px;
+}
+.vf-top i {
+  flex: 1;
+  height: 1px;
+  display: block;
+  font-style: normal;
+}
+.vf-top i:first-child { background: linear-gradient(90deg, transparent, #353025); }
+.vf-top i:last-child  { background: linear-gradient(90deg, #353025, transparent); }
+.vf-top span {
+  font-size: 8px;
+  color: #3a3228;
+  letter-spacing: 3px;
+  transition: color .8s;
+}
+.vf:hover .vf-top span { color: var(--dim); }
+
+/* ── BODY ── */
+.vf-body {
+  width: 300px;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink);
+  border: 1px solid #1c1c1c;
+  animation: flicker 9s infinite;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color .8s;
+}
+.vf-body:hover { border-color: #2e221a; }
+
+/* crt scanlines */
+.vf-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom, transparent, transparent 3px,
+    rgba(0,0,0,.18) 3px, rgba(0,0,0,.18) 4px
+  );
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* rolling scanline */
+.vf-scan {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(176,120,64,.05);
+  z-index: 25;
+  pointer-events: none;
+  animation: scan 4s linear infinite;
+}
+
+/* ── GIF ── */
+.vf-gif {
+  position: absolute;
+  right: 0; top: 0;
+  width: 55%;
+  height: 100%;
+  z-index: 5;
+}
+.vf-gif img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(.35) brightness(.58) sepia(.45) contrast(1.1);
+  transition: filter 1.4s ease;
+  display: block;
+}
+.vf-body:hover .vf-gif img {
+  filter: grayscale(.2) brightness(.68) sepia(.3) contrast(1.05);
+}
+
+/* fade from left over gif */
+.vf-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--ink) 42%, transparent 72%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* ── TEXT ── */
+.vf-txt {
+  position: absolute;
+  left: 0; top: 0;
+  width: 52%;
+  height: 100%;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 14px;
+  gap: 9px;
+}
+
+.vf-lbl {
+  font-size: 6px;
+  letter-spacing: 2px;
+  color: #3a3228;
+  text-transform: uppercase;
+  font-family: monospace;
+}
+
+.vf-lyric {
+  font-size: 9.5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ash);
+  line-height: 1.85;
+}
+.vf-lyric b {
+  color: var(--dim);
+  font-weight: 400;
+}
+.vf-body:hover .vf-lyric {
+  animation: tglitch 5s infinite;
+}
+
+.vf-rule {
+  height: 1px;
+  width: 80%;
+  background: linear-gradient(90deg, #353025, transparent);
+}
+
+/* ghost word */
+.vf-ghost {
+  position: absolute;
+  left: 8px;
+  bottom: -10px;
+  font-size: 54px;
+  color: rgba(90,74,58,.05);
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
+  letter-spacing: -2px;
+  transition: color 1s;
+  z-index: 14;
+}
+.vf-body:hover .vf-ghost { color: rgba(90,74,58,.09); }
